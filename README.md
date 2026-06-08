@@ -2,7 +2,7 @@
 
 > Hybrid-retrieval RAG over your database. Ask natural-language questions, get grounded SQL answers with auto-generated charts and self-correcting validation.
 
-**Live Demo:** _(coming after deploy)_
+**Live Demo:** https://vishwas-datalens-chat-with-database.streamlit.app/
 
 Most "text-to-SQL" tutorials hardcode a schema in a prompt. DataLens reads any database, profiles it on connect, and uses production-grade RAG techniques (hybrid retrieval + multi-agent reasoning + validation loops) to answer questions on databases it has never seen.
 
