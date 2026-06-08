@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 880" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowRetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e11d48"/>
+    </marker>
+    <marker id="arrowQuery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+    </marker>
+    <style>
+      .box { stroke-width: 1.5; rx: 10; ry: 10; }
+      .title { font-size: 14px; font-weight: 600; text-anchor: middle; }
+      .sub { font-size: 11px; text-anchor: middle; }
+      .layer-label { font-size: 10px; font-weight: 600; fill: #94a3b8; letter-spacing: 1.2px; text-anchor: start; }
+      .flow { stroke: #64748b; stroke-width: 1.8; fill: none; marker-end: url(#arrow); }
+      .retry-flow { stroke: #e11d48; stroke-width: 1.8; fill: none; stroke-dasharray: 6 3; marker-end: url(#arrowRetry); }
+      .query-flow { stroke: #3b82f6; stroke-width: 1.8; fill: none; marker-end: url(#arrowQuery); }
+    </style>
+  </defs>
+
+  <text x="20" y="65"  class="layer-label">SOURCE</text>
+  <text x="20" y="170" class="layer-label">PROFILE</text>
+  <text x="20" y="290" class="layer-label">INDEX</text>
+  <text x="20" y="420" class="layer-label">GENERATE</text>
+  <text x="20" y="535" class="layer-label">VALIDATE</text>
+  <text x="20" y="660" class="layer-label">EXECUTE</text>
+  <text x="20" y="795" class="layer-label">OUTPUT</text>
+
+  <rect x="100" y="40" width="220" height="60" class="box" fill="#f0fdf4" stroke="#22c55e"/>
+  <text x="210" y="64" class="title" fill="#14532d">Database Connection</text>
+  <text x="210" y="82" class="sub" fill="#475569">SQLite · Postgres · MySQL</text>
+
+  <rect x="680" y="40" width="220" height="60" class="box" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="790" y="64" class="title" fill="#1e3a8a">User Question</text>
+  <text x="790" y="82" class="sub" fill="#475569">Natural language</text>
+
+  <rect x="100" y="140" width="220" height="70" class="box" fill="#f0fdf4" stroke="#22c55e"/>
+  <text x="210" y="166" class="title" fill="#14532d">SchemaProfiler</text>
+  <text x="210" y="184" class="sub" fill="#475569">Auto-describes each table</text>
+  <text x="210" y="199" class="sub" fill="#475569">(one Gemini call per table)</text>
+
+  <rect x="120" y="260" width="180" height="70" class="box" fill="#fffbeb" stroke="#f59e0b"/>
+  <text x="210" y="285" class="title" fill="#78350f">FAISS</text>
+  <text x="210" y="303" class="sub" fill="#475569">Semantic similarity</text>
+  <text x="210" y="318" class="sub" fill="#475569">gemini-embedding-001</text>
+
+  <rect x="540" y="260" width="180" height="70" class="box" fill="#fffbeb" stroke="#f59e0b"/>
+  <text x="630" y="285" class="title" fill="#78350f">BM25</text>
+  <text x="630" y="303" class="sub" fill="#475569">Keyword frequency</text>
+  <text x="630" y="318" class="sub" fill="#475569">Exact term matching</text>
+
+  <rect x="350" y="350" width="280" height="55" class="box" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="490" y="373" class="title" fill="#4c1d95">RRF Fusion → Top 5 tables</text>
+  <text x="490" y="391" class="sub" fill="#475569">Reciprocal Rank Fusion</text>
+
+  <rect x="340" y="430" width="300" height="65" class="box" fill="#fdf2f8" stroke="#db2777"/>
+  <text x="490" y="455" class="title" fill="#831843">SQLAgent — Gemini 2.5 Flash</text>
+  <text x="490" y="473" class="sub" fill="#475569">Schema-constrained SQL generation</text>
+  <text x="490" y="488" class="sub" fill="#475569">Prefers names over IDs</text>
+
+  <rect x="340" y="545" width="300" height="70" class="box" fill="#fff1f2" stroke="#e11d48"/>
+  <text x="490" y="572" class="title" fill="#881337">Validator + Corrector</text>
+  <text x="490" y="590" class="sub" fill="#475569">sqlglot parse + EXPLAIN dry-run</text>
+  <text x="490" y="605" class="sub" fill="#475569">Up to 3 retries on failure</text>
+
+  <rect x="340" y="660" width="300" height="70" class="box" fill="#ecfeff" stroke="#0891b2"/>
+  <text x="490" y="687" class="title" fill="#164e63">InsightAgent</text>
+  <text x="490" y="705" class="sub" fill="#475569">Execute · auto-pick chart type</text>
+  <text x="490" y="720" class="sub" fill="#475569">Summary with unit-aware formatting</text>
+
+  <rect x="60" y="780" width="200" height="60" class="box" fill="#f8fafc" stroke="#64748b"/>
+  <text x="160" y="804" class="title" fill="#0f172a">Summary</text>
+  <text x="160" y="822" class="sub" fill="#475569">2-sentence insight</text>
+
+  <rect x="285" y="780" width="200" height="60" class="box" fill="#f8fafc" stroke="#64748b"/>
+  <text x="385" y="804" class="title" fill="#0f172a">Auto-chart</text>
+  <text x="385" y="822" class="sub" fill="#475569">Bar · Line · Scatter · Value</text>
+
+  <rect x="510" y="780" width="200" height="60" class="box" fill="#f8fafc" stroke="#64748b"/>
+  <text x="610" y="804" class="title" fill="#0f172a">SQL + Trace</text>
+  <text x="610" y="822" class="sub" fill="#475569">Validated query · retries</text>
+
+  <rect x="735" y="780" width="200" height="60" class="box" fill="#f8fafc" stroke="#64748b"/>
+  <text x="835" y="804" class="title" fill="#0f172a">Full Data</text>
+  <text x="835" y="822" class="sub" fill="#475569">DataFrame · export</text>
+
+  <path class="flow" d="M 210 100 L 210 138"/>
+  <path class="flow" d="M 210 210 L 210 258"/>
+  <path class="flow" d="M 210 210 L 630 258"/>
+
+  <path class="query-flow" d="M 790 100 Q 790 200 720 295"/>
+
+  <path class="flow" d="M 250 330 L 410 348"/>
+  <path class="flow" d="M 590 330 L 570 348"/>
+
+  <path class="flow" d="M 490 405 L 490 428"/>
+  <path class="flow" d="M 490 495 L 490 543"/>
+
+  <path class="retry-flow" d="M 340 580 Q 250 580 250 495 Q 250 462 338 462"/>
+  <text x="195" y="525" font-size="10" font-weight="600" fill="#e11d48">on error</text>
+
+  <path class="flow" d="M 490 615 L 490 658"/>
+
+  <path class="flow" d="M 420 730 L 200 778"/>
+  <path class="flow" d="M 460 730 L 380 778"/>
+  <path class="flow" d="M 520 730 L 600 778"/>
+  <path class="flow" d="M 560 730 L 820 778"/>
+
+  <g transform="translate(770, 130)">
+    <rect x="0" y="0" width="210" height="84" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" rx="6"/>
+    <text x="105" y="16" font-size="10" font-weight="600" fill="#475569" text-anchor="middle" letter-spacing="0.5">LEGEND</text>
+    <line x1="12" y1="32" x2="44" y2="32" stroke="#64748b" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <text x="52" y="35" font-size="10" fill="#475569">Data flow</text>
+    <line x1="12" y1="50" x2="44" y2="50" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#arrowQuery)"/>
+    <text x="52" y="53" font-size="10" fill="#475569">Query input</text>
+    <line x1="12" y1="68" x2="44" y2="68" stroke="#e11d48" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrowRetry)"/>
+    <text x="52" y="71" font-size="10" fill="#475569">Correction retry</text>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+# Virtual environment
+venv/
+myenv/
+env/
+.venv/
+
+# Secrets — never commit
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Caches
+.cache/
+huggingface_cache/
+.huggingface/
+
+# Local SQLite artifacts (keep the .db files for samples)
+*.db-journal
+*.db-shm
+*.db-wal
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Test / temp
+*.tmp
+tmp/
