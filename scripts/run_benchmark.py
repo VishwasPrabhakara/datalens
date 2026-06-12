@@ -55,12 +55,26 @@ def execute(engine, sql: str) -> pd.DataFrame:
         return pd.read_sql(text(sql), conn)
 
 
+def validate_api_key(api_key: str | None) -> str:
+    if not api_key:
+        raise RuntimeError(
+            "GOOGLE_API_KEY is required. Create a Gemini API key in Google AI "
+            "Studio and add it to .env."
+        )
+    api_key = api_key.strip()
+    if not api_key.startswith(("AIza", "AQ.")):
+        raise RuntimeError(
+            "GOOGLE_API_KEY does not look like a Gemini API key. Current "
+            "Google AI Studio authorization keys start with 'AQ.'; older "
+            "standard keys commonly start with 'AIza'."
+        )
+    return api_key
+
+
 def main():
     args = parse_args()
     load_dotenv()
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise RuntimeError("GOOGLE_API_KEY is required.")
+    api_key = validate_api_key(os.getenv("GOOGLE_API_KEY"))
 
     cases = json.loads(args.questions.read_text(encoding="utf-8"))
     engine = create_engine(f"sqlite:///{args.database}")

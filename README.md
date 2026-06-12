@@ -51,17 +51,37 @@ See [SECURITY.md](SECURITY.md) for the complete data-handling guidance.
 ## Evaluation
 
 The repository includes 15 natural-language questions over the public Chinook
-database. Each generated query is compared with a reference query using:
+database. Each generated query is executed and compared with a reference query.
 
-- first-attempt validation rate
-- final validation rate after correction
-- execution success rate
-- result-match rate
-- average correction count
-- average generation latency
+### Chinook Results
 
-No benchmark score is claimed in this README until it has been run and the
-generated JSON results have been reviewed.
+Single run performed in June 2026 using `gemini-2.5-flash`,
+`gemini-embedding-001`, hybrid FAISS/BM25 retrieval, and `top_k=5`.
+
+| Metric | Result |
+|---|---:|
+| Questions | 15 |
+| First-attempt valid SQL | 14/15 (93.3%) |
+| Final valid SQL | 14/15 (93.3%) |
+| Execution success | 14/15 (93.3%) |
+| Exact result match | 12/15 (80.0%) |
+| Average corrections | 0.0 |
+| Average generation latency | 3.74 seconds |
+
+The three non-matching cases are useful failure signals:
+
+- **Retrieval miss:** the question asking for the artist with the most tracks
+  did not retrieve the `Artist` table, so the model returned `NO_ANSWER`.
+- **Interpretation mismatch:** “playlists contain the most tracks” produced
+  only the playlists tied for the maximum, while the reference expected a
+  complete descending ranking.
+- **Tie-order mismatch:** the expensive-tracks query returned valid top-priced
+  tracks, but selected a different set among equal-price rows because it did
+  not apply the reference query's secondary alphabetical ordering.
+
+These figures are from one model run on a small public database, not a claim of
+general text-to-SQL accuracy. LLM output and latency can vary between runs, and
+the exact-result evaluator is intentionally strict about tied rows.
 
 ```powershell
 $env:GOOGLE_API_KEY="your-key"
@@ -89,6 +109,8 @@ streamlit run app.py
 ```
 
 Add your API key to `.env`, then open `http://localhost:8501`.
+Use a Gemini API key created in Google AI Studio. Current authorization keys
+start with `AQ.`; older standard keys commonly start with `AIza`.
 
 The app supports the bundled Chinook database, uploaded SQLite files, and
 SQLAlchemy connection URIs. Non-SQLite databases require the appropriate
