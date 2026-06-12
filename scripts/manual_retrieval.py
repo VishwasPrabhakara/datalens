@@ -1,4 +1,5 @@
 """Smoke test for SchemaRetriever."""
+# Manual integration check; requires Gemini API access.
 from dotenv import load_dotenv
 import os
 

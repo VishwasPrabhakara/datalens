@@ -58,9 +58,13 @@ class DataLens:
     """End-to-end DataLens pipeline. One instance per database."""
 
     def __init__(self, db_uri: str, api_key: str | None = None):
+        is_sqlite_file = (
+            "://" not in db_uri
+            and os.path.splitext(db_uri)[1].lower() in {".db", ".sqlite", ".sqlite3"}
+        )
         self.db_uri = (
             f"sqlite:///{db_uri}"
-            if db_uri.endswith(".db") and "://" not in db_uri
+            if is_sqlite_file
             else db_uri
         )
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")

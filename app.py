@@ -1,8 +1,8 @@
 """
 DataLens — Streamlit UI.
 
-Chat-with-your-database with hybrid schema retrieval, multi-agent SQL
-generation, self-correcting validation, and auto-charting.
+Chat-with-your-database with hybrid schema retrieval, validated SQL
+generation, correction retries, and auto-charting.
 """
 from __future__ import annotations
 
@@ -82,7 +82,7 @@ def _markdown_export() -> str:
 with st.sidebar:
     st.markdown("### 📊 DataLens")
     st.caption(
-        "Hybrid schema retrieval · multi-agent SQL · self-correcting validation · auto-charting."
+        "Hybrid schema retrieval | validated SQL generation | correction retries | auto-charting."
     )
     st.divider()
 
@@ -121,6 +121,10 @@ with st.sidebar:
             db_label = uploaded.name
 
     else:  # Connection URI
+        st.warning(
+            "Use a dedicated read-only database account. Do not connect "
+            "production or sensitive databases to this public demo."
+        )
         db_uri_input = st.text_input(
             "SQLAlchemy URI",
             placeholder="postgresql+psycopg2://user:pass@host:5432/dbname",
@@ -130,11 +134,19 @@ with st.sidebar:
             db_uri = db_uri_input
             db_label = db_uri_input.split("@")[-1] if "@" in db_uri_input else db_uri_input
 
+    st.info(
+        "Data disclosure: schema metadata and sampled rows are sent to Google Gemini "
+        "during profiling. Query result previews may also be sent to generate summaries."
+    )
+    data_consent = st.checkbox(
+        "I confirm this database contains no confidential, regulated, or personal data."
+    )
+
     if st.button(
         "Connect",
         type="primary",
         use_container_width=True,
-        disabled=not db_uri or not api_key,
+        disabled=not db_uri or not api_key or not data_consent,
     ):
         with st.spinner("Profiling schema and building retriever…"):
             try:
@@ -278,7 +290,7 @@ def render_answer(ans: Answer, idx: int) -> None:
 st.markdown("## 📊 DataLens")
 st.caption(
     "Ask grounded, cited questions about your database. "
-    "Hybrid schema retrieval → multi-agent SQL → self-correcting validation → auto-charts."
+    "Hybrid schema retrieval -> validated read-only SQL -> correction retries -> auto-charts."
 )
 
 if st.session_state.lens is None:

@@ -1,4 +1,5 @@
 """End-to-end test of the DataLens pipeline."""
+# Manual integration check; requires Gemini API access.
 from dotenv import load_dotenv
 
 from datalens import DataLens

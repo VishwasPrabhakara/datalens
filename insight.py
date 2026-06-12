@@ -21,6 +21,7 @@ from prompts import INSIGHT_PROMPT
 INSIGHT_MODEL = "gemini-2.5-flash"
 MAX_BAR_CATEGORIES = 25
 RESULT_PREVIEW_ROWS = 10
+MAX_RESULT_ROWS = 1000
 
 
 @dataclass
@@ -67,7 +68,14 @@ class InsightAgent:
 
     def _execute(self, sql: str) -> pd.DataFrame:
         with self.engine.connect() as conn:
-            return pd.read_sql(text(sql), conn)
+            result = conn.execute(text(sql))
+            rows = result.fetchmany(MAX_RESULT_ROWS + 1)
+            if len(rows) > MAX_RESULT_ROWS:
+                raise ValueError(
+                    f"Query returned more than {MAX_RESULT_ROWS} rows. "
+                    "Ask a narrower question or add an aggregate."
+                )
+            return pd.DataFrame(rows, columns=result.keys())
 
     def _pick_chart_type(self, df: pd.DataFrame) -> str:
         n_rows, n_cols = df.shape

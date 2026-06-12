@@ -5,10 +5,13 @@ SQL_PROMPT = """You are DataLens, an expert SQL generator. Generate ONE SQL quer
 # Rules
 - Use ONLY the tables and columns listed in the schema. Do NOT invent columns.
 - Use the SQL dialect: {dialect}.
+- Generate one read-only SELECT query. Never use INSERT, UPDATE, DELETE, DDL,
+  transactions, PRAGMA, ATTACH, COPY, or administrative commands.
 - Return ONLY the SQL query — no markdown, no code fences, no explanation, no semicolon at the end.
 - If the question cannot be answered with this schema, return exactly: NO_ANSWER
 - Prefer explicit JOINs over implicit comma joins.
 - Use LIMIT to cap result sets when the question asks for "top", "best", "most", or similar.
+- For non-aggregate row listings, include LIMIT 100 unless the user requests a smaller limit.
 - Use clear column aliases for computed values (COUNT, SUM, AVG, etc.).
 
 # CRITICAL — Human-readable output rules
@@ -45,6 +48,7 @@ CORRECTION_PROMPT = """The previous SQL query failed. Fix it.
 - Return ONLY the corrected SQL — no markdown, no code fences, no explanation.
 - Do NOT add a semicolon.
 - Use SQL dialect: {dialect}.
+- The corrected statement must remain a single read-only SELECT query.
 - If the error suggests a missing column, check the schema and use only columns that exist.
 
 # Corrected SQL

@@ -5,8 +5,8 @@ Two-stage validation:
   1. sqlglot parse  -> catches syntax errors offline
   2. EXPLAIN dry-run -> catches missing columns/tables against the live DB
 
-Returns a structured ValidationResult that's safe to feed to the Corrector
-when validation fails.
+Only a single read-only query is accepted. Returns a structured
+ValidationResult that's safe to feed to the Corrector when validation fails.
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from sqlalchemy.exc import SQLAlchemyError
 class ValidationResult:
     ok: bool
     error: str = ""
-    stage: str = ""  # "parse" | "explain" | ""
+    stage: str = ""  # "parse" | "policy" | "explain" | ""
 
     def __bool__(self) -> bool:
         return self.ok
@@ -36,14 +36,33 @@ class Validator:
         self.dialect = dialect
 
     def validate(self, sql: str) -> ValidationResult:
-        # Stage 1: syntactic check via sqlglot
+        # Stage 1: parse exactly one statement.
         try:
-            sqlglot.parse_one(sql, read=self.dialect)
+            statements = [
+                statement
+                for statement in sqlglot.parse(sql, read=self.dialect)
+                if statement is not None
+            ]
         except sqlglot.errors.ParseError as e:
             return ValidationResult(
                 ok=False,
                 error=f"Syntax error: {e}",
                 stage="parse",
+            )
+
+        if len(statements) != 1:
+            return ValidationResult(
+                ok=False,
+                error="Exactly one SQL statement is allowed.",
+                stage="policy",
+            )
+
+        statement = statements[0]
+        if not _is_read_only_query(statement):
+            return ValidationResult(
+                ok=False,
+                error="Only read-only SELECT queries are allowed.",
+                stage="policy",
             )
 
         # Stage 2: semantic check via EXPLAIN
@@ -58,6 +77,33 @@ class Validator:
             )
 
         return ValidationResult(ok=True)
+
+
+def _is_read_only_query(statement: sqlglot.Expression) -> bool:
+    """Allow query expressions while rejecting DML, DDL and commands."""
+    forbidden = tuple(
+        expression_type
+        for name in (
+            "Insert",
+            "Update",
+            "Delete",
+            "Create",
+            "Drop",
+            "Alter",
+            "Command",
+            "Transaction",
+            "Commit",
+            "Rollback",
+            "Merge",
+            "Copy",
+        )
+        if (expression_type := getattr(sqlglot.exp, name, None)) is not None
+    )
+    if isinstance(statement, forbidden):
+        return False
+    if any(statement.find(expression_type) is not None for expression_type in forbidden):
+        return False
+    return isinstance(statement, sqlglot.exp.Query)
 
 
 def _clean_db_error(raw: str) -> str:

@@ -1,4 +1,5 @@
 """Smoke test for the generate-validate-correct loop."""
+# Manual integration check; requires Gemini API access.
 from dotenv import load_dotenv
 import os
 

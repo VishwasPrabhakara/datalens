@@ -34,3 +34,4 @@ Thumbs.db
 # Test / temp
 *.tmp
 tmp/
+benchmark_results/

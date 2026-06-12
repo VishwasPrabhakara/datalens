@@ -1,4 +1,5 @@
 """Smoke test for SchemaProfiler."""
+# Manual integration check; requires Gemini API access.
 from dotenv import load_dotenv
 from schema_profiler import SchemaProfiler
 

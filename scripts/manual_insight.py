@@ -1,4 +1,5 @@
 """Smoke test for InsightAgent — runs SQL, picks chart, summarizes."""
+# Manual integration check; requires Gemini API access.
 from dotenv import load_dotenv
 import os
 

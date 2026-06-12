@@ -1,0 +1,77 @@
+[
+  {
+    "id": "top_customers",
+    "question": "Which 5 customers spent the most?",
+    "reference_sql": "SELECT FirstName || ' ' || LastName AS Customer, SUM(Total) AS TotalSpending FROM Customer JOIN Invoice USING (CustomerId) GROUP BY CustomerId ORDER BY TotalSpending DESC LIMIT 5"
+  },
+  {
+    "id": "revenue_by_country",
+    "question": "What is the total invoice revenue by billing country?",
+    "reference_sql": "SELECT BillingCountry, SUM(Total) AS Revenue FROM Invoice GROUP BY BillingCountry ORDER BY Revenue DESC"
+  },
+  {
+    "id": "tracks_by_genre",
+    "question": "How many tracks are in each genre?",
+    "reference_sql": "SELECT Genre.Name AS Genre, COUNT(Track.TrackId) AS TrackCount FROM Genre JOIN Track ON Genre.GenreId = Track.GenreId GROUP BY Genre.GenreId ORDER BY TrackCount DESC"
+  },
+  {
+    "id": "artist_most_albums",
+    "question": "Which 5 artists have the most albums?",
+    "reference_sql": "SELECT Artist.Name AS Artist, COUNT(Album.AlbumId) AS AlbumCount FROM Artist JOIN Album ON Artist.ArtistId = Album.ArtistId GROUP BY Artist.ArtistId ORDER BY AlbumCount DESC LIMIT 5"
+  },
+  {
+    "id": "artist_most_tracks",
+    "question": "Which artist has the most tracks?",
+    "reference_sql": "SELECT Artist.Name AS Artist, COUNT(Track.TrackId) AS TrackCount FROM Artist JOIN Album ON Artist.ArtistId = Album.ArtistId JOIN Track ON Album.AlbumId = Track.AlbumId GROUP BY Artist.ArtistId ORDER BY TrackCount DESC LIMIT 1"
+  },
+  {
+    "id": "average_track_duration",
+    "question": "What is the average track duration in milliseconds by genre?",
+    "reference_sql": "SELECT Genre.Name AS Genre, AVG(Track.Milliseconds) AS AverageMilliseconds FROM Genre JOIN Track ON Genre.GenreId = Track.GenreId GROUP BY Genre.GenreId ORDER BY AverageMilliseconds DESC"
+  },
+  {
+    "id": "invoice_count_by_year",
+    "question": "How many invoices were issued in each year?",
+    "reference_sql": "SELECT strftime('%Y', InvoiceDate) AS Year, COUNT(*) AS InvoiceCount FROM Invoice GROUP BY Year ORDER BY Year"
+  },
+  {
+    "id": "employee_reports",
+    "question": "How many employees report to each manager?",
+    "reference_sql": "SELECT Manager.FirstName || ' ' || Manager.LastName AS Manager, COUNT(Employee.EmployeeId) AS DirectReports FROM Employee JOIN Employee AS Manager ON Employee.ReportsTo = Manager.EmployeeId GROUP BY Manager.EmployeeId ORDER BY DirectReports DESC"
+  },
+  {
+    "id": "playlist_track_counts",
+    "question": "Which playlists contain the most tracks?",
+    "reference_sql": "SELECT Playlist.Name AS Playlist, COUNT(PlaylistTrack.TrackId) AS TrackCount FROM Playlist JOIN PlaylistTrack ON Playlist.PlaylistId = PlaylistTrack.PlaylistId GROUP BY Playlist.PlaylistId ORDER BY TrackCount DESC"
+  },
+  {
+    "id": "media_type_usage",
+    "question": "How many tracks use each media type?",
+    "reference_sql": "SELECT MediaType.Name AS MediaType, COUNT(Track.TrackId) AS TrackCount FROM MediaType JOIN Track ON MediaType.MediaTypeId = Track.MediaTypeId GROUP BY MediaType.MediaTypeId ORDER BY TrackCount DESC"
+  },
+  {
+    "id": "highest_invoice",
+    "question": "Which customer had the highest single invoice total?",
+    "reference_sql": "SELECT Customer.FirstName || ' ' || Customer.LastName AS Customer, Invoice.Total FROM Customer JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId ORDER BY Invoice.Total DESC LIMIT 1"
+  },
+  {
+    "id": "sales_by_agent",
+    "question": "What is the total customer revenue for each support representative?",
+    "reference_sql": "SELECT Employee.FirstName || ' ' || Employee.LastName AS Employee, SUM(Invoice.Total) AS Revenue FROM Employee JOIN Customer ON Employee.EmployeeId = Customer.SupportRepId JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId GROUP BY Employee.EmployeeId ORDER BY Revenue DESC"
+  },
+  {
+    "id": "expensive_tracks",
+    "question": "List the 10 most expensive tracks with their artist names.",
+    "reference_sql": "SELECT Track.Name AS Track, Artist.Name AS Artist, Track.UnitPrice FROM Track JOIN Album ON Track.AlbumId = Album.AlbumId JOIN Artist ON Album.ArtistId = Artist.ArtistId ORDER BY Track.UnitPrice DESC, Track.Name LIMIT 10"
+  },
+  {
+    "id": "rock_tracks",
+    "question": "How many Rock tracks are available?",
+    "reference_sql": "SELECT COUNT(*) AS TrackCount FROM Track JOIN Genre ON Track.GenreId = Genre.GenreId WHERE Genre.Name = 'Rock'"
+  },
+  {
+    "id": "customers_without_company",
+    "question": "How many customers do not have a company listed?",
+    "reference_sql": "SELECT COUNT(*) AS CustomerCount FROM Customer WHERE Company IS NULL OR TRIM(Company) = ''"
+  }
+]
