@@ -1,5 +1,9 @@
 # DataLens
 
+[![Tests](https://github.com/VishwasPrabhakara/datalens/actions/workflows/tests.yml/badge.svg)](https://github.com/VishwasPrabhakara/datalens/actions/workflows/tests.yml)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://vishwas-datalens-chat-with-database.streamlit.app/)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+
 Natural-language analytics over relational databases using hybrid schema
 retrieval, constrained SQL generation, validation, correction retries, and
 automatic visualizations.
