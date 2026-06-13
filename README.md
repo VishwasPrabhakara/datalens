@@ -31,7 +31,7 @@ production database administration tool.
 | `SchemaRetriever` | Combines semantic and keyword retrieval over schema documents |
 | `SQLAgent` | Generates one SQL query using the retrieved schema context |
 | `Validator` | Rejects non-read-only or multi-statement SQL, then runs `EXPLAIN` |
-| Correction loop | Sends validation feedback back to the SQL agent for up to three attempts |
+| 'Correction loop' | Sends validation feedback back to the SQL agent for up to three attempts |
 | `InsightAgent` | Executes validated SQL, caps results, selects a chart, and creates a summary |
 
 ## Safety Boundary
